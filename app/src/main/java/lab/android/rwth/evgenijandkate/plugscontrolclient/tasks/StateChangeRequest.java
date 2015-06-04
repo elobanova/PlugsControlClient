@@ -2,45 +2,41 @@ package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
 import android.os.AsyncTask;
 
-import org.json.JSONException;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.model.StateEnum;
 
 /**
  * Created by ekaterina on 04.06.2015.
  */
-public class PlugsListGetRequest {
+public class StateChangeRequest {
     private OnResponseListener onResponseListener;
+    private IListItem item;
+
+    public StateChangeRequest(IListItem item) {
+        this.item = item;
+    }
 
     public void send() {
-        new HttpGetPlugsTask().execute();
+        new HttpGetChangeStateTask().execute(item);
     }
 
     public void setOnResponseListener(OnResponseListener onResponseListener) {
         this.onResponseListener = onResponseListener;
     }
 
-    private class HttpGetPlugsTask extends AsyncTask<Void, Void, List<IListItem>> {
+    private class HttpGetChangeStateTask extends AsyncTask<IListItem, Void, Boolean> {
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            onResponseListener.onPreExecute();
-        }
-
-        @Override
-        protected List<IListItem> doInBackground(Void... params) {
+        protected Boolean doInBackground(IListItem... params) {
             HttpURLConnection conn = null;
+            String path = StateEnum.ON.equals(params[0].getState()) ? "/turnON/" : "/turnOFF/";
             try {
-                URL url = new URL("http://128.199.60.69:3000/api/plugs");
+                URL url = new URL("http://128.199.60.69:3000/api/plugs" + path + params[0].getListItemId());
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
@@ -49,34 +45,30 @@ public class PlugsListGetRequest {
                 switch (status) {
                     case 200:
                     case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line + "\n");
-                        }
-                        br.close();
-                        return JSONPlugsParser.parse(sb.toString());
+                        return true;
                 }
-
             } catch (MalformedURLException e) {
                 onResponseListener.onError(e.getMessage());
             } catch (IOException e) {
                 onResponseListener.onError(e.getMessage());
-            } catch (JSONException e) {
-                e.printStackTrace();
             } finally {
                 if (conn != null) {
                     conn.disconnect();
                 }
             }
-            return null;
+            return false;
         }
 
         @Override
-        protected void onPostExecute(List<IListItem> items) {
-            super.onPostExecute(items);
-            onResponseListener.onResponse(items);
+        protected void onPreExecute() {
+            super.onPreExecute();
+            onResponseListener.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean statusChangedSuccessfully) {
+            super.onPostExecute(statusChangedSuccessfully);
+            onResponseListener.onResponse(statusChangedSuccessfully);
         }
     }
 }

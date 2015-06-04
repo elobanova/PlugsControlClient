@@ -5,7 +5,7 @@ package lab.android.rwth.evgenijandkate.plugscontrolclient.model;
  */
 public class PlugItem implements IListItem {
     private final int id;
-    private final String name;
+    private String name;
     private StateEnum state;
 
     public PlugItem(int id, String name, StateEnum state) {
@@ -22,5 +22,19 @@ public class PlugItem implements IListItem {
     @Override
     public String getListItemLabel() {
         return this.name;
+    }
+
+    public void setListItemLabel(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public StateEnum getState() {
+        return this.state;
+    }
+
+    @Override
+    public void setState(StateEnum stateEnum) {
+        this.state = stateEnum;
     }
 }

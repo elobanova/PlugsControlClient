@@ -7,10 +7,10 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
 /**
  * Created by ekaterina on 04.06.2015.
  */
-public interface OnResponseListener {
+public interface OnResponseListener<T> {
     void onPreExecute();
 
-    void onResponse(List<IListItem> items);
+    void onResponse(T response);
 
     void onError(String errorMessage);
 }

@@ -24,13 +24,12 @@ public class JSONPlugsParser {
 
     public static List<IListItem> parse(String jsonString) throws JSONException {
         List<IListItem> items = new ArrayList<>();
-        //TODO
-        jsonString = "[{\"id\":1,\"name\":\"Plug A\",\"state\":\"OFF\"},{\"id\":2,\"name\":\"Plug B\",\"state\":\"OFF\"},{\"id\":3,\"name\":\"Plug C\",\"state\":\"OFF\"},{\"id\":4,\"name\":\"Plug D\",\"state\":\"OFF\"},{\"id\":5,\"name\":\"Awesome Plug\",\"state\":\"ON\"}]";
-        JSONArray jsonArray = new JSONArray(jsonString);
-        for (int i = 0; i < jsonArray.length(); i++) {
-            int plugId = jsonArray.getJSONObject(i).getInt(ID_PROPERTY_NAME);
-            String plugLabel = jsonArray.getJSONObject(i).getString(LABEL_PROPERTY_NAME);
-            StateEnum plugState = StateEnum.valueOf(jsonArray.getJSONObject(i).getString(STATE_PROPERTY_NAME));
+        JSONArray plugsList = new JSONArray(jsonString);
+        for (int i = 0; i < plugsList.length(); i++) {
+            JSONObject plugJSONObject = plugsList.getJSONObject(i);
+            int plugId = plugJSONObject.getInt(ID_PROPERTY_NAME);
+            String plugLabel = plugJSONObject.getString(LABEL_PROPERTY_NAME);
+            StateEnum plugState = StateEnum.valueOf(plugJSONObject.getString(STATE_PROPERTY_NAME));
             items.add(new PlugItem(plugId, plugLabel, plugState));
         }
         return items;

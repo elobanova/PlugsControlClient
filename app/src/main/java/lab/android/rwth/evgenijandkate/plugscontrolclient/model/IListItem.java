@@ -8,4 +8,7 @@ import java.io.Serializable;
 public interface IListItem extends Serializable {
     int getListItemId();
     String getListItemLabel();
+    StateEnum getState();
+
+    void setState(StateEnum stateEnum);
 }
