@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.R;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
-import lab.android.rwth.evgenijandkate.plugscontrolclient.model.PlugItem;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.StateEnum;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListener;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.StateChangeRequest;

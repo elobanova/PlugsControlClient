@@ -1,12 +1,9 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
-import android.util.JsonReader;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
 
 /**
@@ -40,7 +41,7 @@ public class PlugsListGetRequest {
         protected List<IListItem> doInBackground(Void... params) {
             HttpURLConnection conn = null;
             try {
-                URL url = new URL("http://128.199.60.69:3000/api/plugs");
+                URL url = new URL("http://" + PlugsControlActivity.SERVER_IP + ":" + PlugsControlActivity.SERVER_PORT + "/api/plugs");
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
