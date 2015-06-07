@@ -12,4 +12,7 @@
     <string name="full_name"><![CDATA[Name & Surname:]]></string>
     <string name="create_password">Create password:</string>
     <string name="signup_button_label">Sign Up</string>
+    <string name="enter_plug_name">Name of the plug:</string>
+    <string name="enter_house_code">House code:</string>
+    <string name="enter_switch_code">Switch code:</string>
 </resources>

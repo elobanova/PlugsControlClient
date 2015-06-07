@@ -1,8 +1,10 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient;
 
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.io.Serializable;
@@ -10,12 +12,16 @@ import java.util.List;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.adapter.PlugsListAdapter;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.AddPlugRequest;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.DeletePlugRequest;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListener;
 
 /**
  * Created by ekaterina on 04.06.2015.
  */
 public class PlugsListFragment extends ListFragment {
     public static final String PLUGS_LIST_KEY = "PLUGS";
+    private static final int ADD_PLUG_REQUEST = 0;
     private List<IListItem> items;
     private PlugsListAdapter adapter;
 
@@ -45,6 +51,52 @@ public class PlugsListFragment extends ListFragment {
         getListView().setFooterDividersEnabled(true);
         LinearLayout footerView = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.footer_view, null);
         getListView().addFooterView(footerView);
+        initAddPlugButton();
+        initDeletePlugButton();
+    }
+
+    private void initAddPlugButton() {
+        final Button addPlugButton = (Button) getListView().findViewById(R.id.add_plug_button);
+        addPlugButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addActivityIntent = new Intent(getActivity(), AddPlugActivity.class);
+                startActivityForResult(addActivityIntent, ADD_PLUG_REQUEST);
+            }
+        });
+    }
+
+    private void initDeletePlugButton() {
+        final Button deletePlugsButton = (Button) getListView().findViewById(R.id.delete_plug_button);
+        deletePlugsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DeletePlugRequest deletePlugRequest = new DeletePlugRequest(adapter.getItems());
+                deletePlugRequest.setOnResponseListener(new OnResponseListener<Boolean>() {
+                    @Override
+                    public void onPreExecute() {
+
+                    }
+
+                    @Override
+                    public void onResponse(Boolean responseOK) {
+                        if (responseOK) {
+                            for (int i = 0; i < adapter.getCount(); i++) {
+                                if (adapter.getItem(i).isChecked()) {
+                                    adapter.remove(i);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+
+                    }
+                });
+                deletePlugRequest.send();
+            }
+        });
     }
 
     private void addItemsToAdapter() {

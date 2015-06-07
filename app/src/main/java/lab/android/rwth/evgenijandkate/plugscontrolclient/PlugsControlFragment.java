@@ -62,4 +62,14 @@ public class PlugsControlFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.plugs_control_fragment, container, false);
     }
+
+    public void refreshList() {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragment = (PlugsListFragment) fragmentManager.findFragmentByTag(FRAGMENT_TAG);
+        if (fragment != null) {
+            // remove the fragment
+            fragmentManager.beginTransaction().remove(fragment).commit();
+        }
+        loadData();
+    }
 }

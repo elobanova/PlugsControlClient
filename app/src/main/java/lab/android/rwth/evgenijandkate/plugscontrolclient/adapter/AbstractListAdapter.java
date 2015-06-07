@@ -42,12 +42,21 @@ public abstract class AbstractListAdapter<T extends Serializable> extends BaseAd
     }
 
     @Override
-    public Object getItem(int pos) {
+    public T getItem(int pos) {
         return items.get(pos);
     }
 
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void remove(int position) {
+        items.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public List<T> getItems() {
+        return items;
     }
 }

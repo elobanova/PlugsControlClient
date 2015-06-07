@@ -12,8 +12,6 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.util.List;
-
 import lab.android.rwth.evgenijandkate.plugscontrolclient.R;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.StateEnum;

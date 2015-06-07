@@ -24,4 +24,12 @@ public class PlugsControlActivity extends FragmentActivity {
             fragmentManager.beginTransaction().add(R.id.fragment_container, controlFragment, FRAGMENT_TAG).commit();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (controlFragment != null) {
+            controlFragment.refreshList();
+        }
+    }
 }
