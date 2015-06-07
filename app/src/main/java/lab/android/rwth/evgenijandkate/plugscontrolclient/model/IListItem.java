@@ -11,4 +11,7 @@ public interface IListItem extends Serializable {
     StateEnum getState();
 
     void setState(StateEnum stateEnum);
+    void setChecked(boolean isChecked);
+
+    boolean isChecked();
 }

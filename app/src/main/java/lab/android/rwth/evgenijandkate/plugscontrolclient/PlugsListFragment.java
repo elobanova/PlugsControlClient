@@ -2,6 +2,8 @@ package lab.android.rwth.evgenijandkate.plugscontrolclient;
 
 import android.app.ListFragment;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import java.io.Serializable;
 import java.util.List;
@@ -31,10 +33,18 @@ public class PlugsListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         this.items = (List<IListItem>) getArguments().getSerializable(PLUGS_LIST_KEY);
-
         this.adapter = new PlugsListAdapter(getActivity().getApplicationContext());
         setListAdapter(this.adapter);
         addItemsToAdapter();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // Put divider between items and FooterView
+        getListView().setFooterDividersEnabled(true);
+        LinearLayout footerView = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.footer_view, null);
+        getListView().addFooterView(footerView);
     }
 
     private void addItemsToAdapter() {

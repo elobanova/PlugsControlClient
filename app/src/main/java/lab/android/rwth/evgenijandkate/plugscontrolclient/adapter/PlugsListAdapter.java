@@ -4,10 +4,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import java.util.List;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.R;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
@@ -38,38 +43,69 @@ public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
             TextView plugName = (TextView) view.findViewById(R.id.plug_name_in_list);
             plugName.setText(item.getListItemLabel());
 
-            Switch switcher = (Switch) view.findViewById(R.id.switcher);
-            switcher.setChecked(StateEnum.ON.equals(item.getState()));
-            switcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            initSwitcher(view, item);
+            initCheck(view, item, parent);
+        }
+        return view;
+    }
+
+    private void initCheck(View view, final IListItem item, ViewGroup parent) {
+        if (parent instanceof ListView) {
+            CheckBox check = (CheckBox) view.findViewById(R.id.plug_check_box);
+            ListView parentList = (ListView) parent;
+            final Button deletePlugsButton = (Button) parentList.findViewById(R.id.delete_plug_button);
+
+            check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    final StateEnum oldState = item.getState();
-                    item.setState(isChecked ? StateEnum.ON : StateEnum.OFF);
-                    StateChangeRequest stateChangeRequest = new StateChangeRequest(item);
-                    stateChangeRequest.setOnResponseListener(new OnResponseListener<Boolean>() {
-                        @Override
-                        public void onPreExecute() {
-
-                        }
-
-                        @Override
-                        public void onResponse(Boolean responseOK) {
-                            if (responseOK) {
-                                notifyDataSetChanged();
-                            } else {
-                                item.setState(oldState);
-                            }
-                        }
-
-                        @Override
-                        public void onError(String errorMessage) {
-
-                        }
-                    });
-                    stateChangeRequest.send();
+                    item.setChecked(isChecked);
+                    deletePlugsButton.setEnabled(atLeastOneItemIsChecked());
                 }
             });
         }
-        return view;
+    }
+
+    private boolean atLeastOneItemIsChecked() {
+        if (this.items != null) {
+            for (IListItem listItem : this.items) {
+                if (listItem.isChecked()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void initSwitcher(View view, final IListItem item) {
+        Switch switcher = (Switch) view.findViewById(R.id.switcher);
+        switcher.setChecked(StateEnum.ON.equals(item.getState()));
+        switcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                final StateEnum oldState = item.getState();
+                item.setState(isChecked ? StateEnum.ON : StateEnum.OFF);
+                StateChangeRequest stateChangeRequest = new StateChangeRequest(item);
+                stateChangeRequest.setOnResponseListener(new OnResponseListener<Boolean>() {
+                    @Override
+                    public void onPreExecute() {
+
+                    }
+
+                    @Override
+                    public void onResponse(Boolean responseOK) {
+                        if (!responseOK) {
+                            item.setState(oldState);
+                        }
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+
+                    }
+                });
+                stateChangeRequest.send();
+            }
+        });
     }
 }

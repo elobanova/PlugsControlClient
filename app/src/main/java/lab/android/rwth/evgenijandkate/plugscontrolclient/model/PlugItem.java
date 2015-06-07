@@ -7,6 +7,7 @@ public class PlugItem implements IListItem {
     private final int id;
     private String name;
     private StateEnum state;
+    private boolean isChecked = false;
 
     public PlugItem(int id, String name, StateEnum state) {
         this.id = id;
@@ -36,5 +37,15 @@ public class PlugItem implements IListItem {
     @Override
     public void setState(StateEnum stateEnum) {
         this.state = stateEnum;
+    }
+
+    @Override
+    public void setChecked(boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
+    @Override
+    public boolean isChecked() {
+        return this.isChecked;
     }
 }
