@@ -2,49 +2,44 @@ package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
 import android.os.AsyncTask;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
-import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.model.PlugTransferableData;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.StateEnum;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
 /**
- * Created by ekaterina on 04.06.2015.
+ * Created by ekaterina on 07.06.2015.
  */
-public class StateChangeRequest {
+public class CheckUserTask {
     private OnResponseListener onResponseListener;
-    private IListItem item;
 
-    public StateChangeRequest(IListItem item) {
-        this.item = item;
-    }
-
-    public void send() {
-        new HttpGetChangeStateTask().execute(item);
+    public void send(User user) {
+        new HttpCheckUserTask().execute(user);
     }
 
     public void setOnResponseListener(OnResponseListener onResponseListener) {
         this.onResponseListener = onResponseListener;
     }
 
-    private class HttpGetChangeStateTask extends AsyncTask<IListItem, Void, Boolean> {
+    private class HttpCheckUserTask extends AsyncTask<User, Void, Boolean> {
 
         @Override
-        protected Boolean doInBackground(IListItem... params) {
+        protected Boolean doInBackground(User... args) {
+            User loggingInUser = args[0];
             HttpURLConnection conn = null;
-            User connectedUser = LogInFragment.getConnectedUser();
-            if (connectedUser == null) return false;
-            String path = StateEnum.ON.equals(params[0].getState()) ? "/turnON/" : "/turnOFF/";
             try {
-                URL url = new URL("http://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs" + path + params[0].getListItemId());
+                URL url = new URL("http://" + loggingInUser.getIpValue() + ":" + loggingInUser.getPortValue() + "/api/authenticate");
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
-                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
+                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(loggingInUser.getEmailAddress(), loggingInUser.getPassword()));
                 conn.setDoInput(true);
                 conn.connect();
                 int status = conn.getResponseCode();
@@ -72,9 +67,9 @@ public class StateChangeRequest {
         }
 
         @Override
-        protected void onPostExecute(Boolean statusChangedSuccessfully) {
-            super.onPostExecute(statusChangedSuccessfully);
-            onResponseListener.onResponse(statusChangedSuccessfully);
+        protected void onPostExecute(Boolean isAuthenticated) {
+            super.onPostExecute(isAuthenticated);
+            onResponseListener.onResponse(isAuthenticated);
         }
     }
 }

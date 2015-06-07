@@ -7,8 +7,6 @@ import android.os.Bundle;
 public class PlugsControlActivity extends FragmentActivity {
     private final static String FRAGMENT_TAG = "data";
     private PlugsControlFragment controlFragment;
-    public static String SERVER_IP = "128.199.60.69";
-    public static String SERVER_PORT = "3000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

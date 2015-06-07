@@ -9,8 +9,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.PlugTransferableData;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
 /**
  * Created by ekaterina on 07.06.2015.
@@ -31,6 +32,8 @@ public class AddPlugRequest {
         @Override
         protected Boolean doInBackground(PlugTransferableData... args) {
             HttpURLConnection conn = null;
+            User connectedUser = LogInFragment.getConnectedUser();
+            if (connectedUser == null) return false;
             try {
                 PlugTransferableData plugData = args[0];
                 String urlParameters =
@@ -39,10 +42,11 @@ public class AddPlugRequest {
                                 "&switch_code=" + URLEncoder.encode(plugData.getSwitchCode(), "UTF-8") +
                                 "&state=" + URLEncoder.encode(plugData.getState().getName(), "UTF-8");
 
-                URL url = new URL("http://" + PlugsControlActivity.SERVER_IP + ":" + PlugsControlActivity.SERVER_PORT + "/api/plugs");
+                URL url = new URL("http://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs");
 
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
+                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
                 conn.setRequestProperty("Content-Type",
                         "application/x-www-form-urlencoded");
 
@@ -76,7 +80,7 @@ public class AddPlugRequest {
                 }
             }
 
-            return null;
+            return false;
         }
 
         @Override

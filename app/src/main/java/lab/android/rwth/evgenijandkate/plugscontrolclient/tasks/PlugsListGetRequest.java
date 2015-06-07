@@ -1,5 +1,6 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
@@ -13,7 +14,9 @@ import java.net.URL;
 import java.util.List;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
 /**
  * Created by ekaterina on 04.06.2015.
@@ -40,10 +43,13 @@ public class PlugsListGetRequest {
         @Override
         protected List<IListItem> doInBackground(Void... params) {
             HttpURLConnection conn = null;
+            User connectedUser = LogInFragment.getConnectedUser();
+            if (connectedUser == null) return null;
             try {
-                URL url = new URL("http://" + PlugsControlActivity.SERVER_IP + ":" + PlugsControlActivity.SERVER_PORT + "/api/plugs");
+                URL url = new URL("http://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs");
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
+                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
                 conn.setDoInput(true);
                 conn.connect();
                 int status = conn.getResponseCode();

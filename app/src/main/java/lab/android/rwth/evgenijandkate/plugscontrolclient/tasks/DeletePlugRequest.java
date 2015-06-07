@@ -9,8 +9,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
 /**
  * Created by ekaterina on 07.06.2015.
@@ -50,10 +51,13 @@ public class DeletePlugRequest {
 
         private boolean connectToDeleteItem(int listItemId) {
             HttpURLConnection conn = null;
+            User connectedUser = LogInFragment.getConnectedUser();
+            if (connectedUser == null) return false;
             try {
-                URL url = new URL("http://" + PlugsControlActivity.SERVER_IP + ":" + PlugsControlActivity.SERVER_PORT + "/api/plugs/" + listItemId);
+                URL url = new URL("http://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs/" + listItemId);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("DELETE");
+                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
                 conn.setDoInput(true);
                 conn.connect();
                 int status = conn.getResponseCode();

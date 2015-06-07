@@ -15,4 +15,6 @@
     <string name="enter_plug_name">Name of the plug:</string>
     <string name="enter_house_code">House code:</string>
     <string name="enter_switch_code">Switch code:</string>
+    <string name="login_ip_label">Host IP:</string>
+    <string name="login_port_label">Host Port:</string>
 </resources>
