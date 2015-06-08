@@ -28,6 +28,7 @@ public class LogInFragment extends Fragment {
     public static final String password = "passwordKey";
     public static final String ip = "ipKey";
     public static final String port = "portKey";
+    public static final String isAdmin = "isAdmin";
     private static SharedPreferences sharedpreferences;
 
     private Button loginButton;
@@ -63,20 +64,21 @@ public class LogInFragment extends Fragment {
             final String portValue = ((EditText) portInput).getText().toString();
 
             CheckUserTask checkUserTask = new CheckUserTask();
-            checkUserTask.setOnResponseListener(new OnResponseListener<Boolean>() {
+            checkUserTask.setOnResponseListener(new OnResponseListener<User>() {
                 @Override
                 public void onPreExecute() {
 
                 }
 
                 @Override
-                public void onResponse(Boolean responseOK) {
-                    if (responseOK) {
+                public void onResponse(User connectedUser) {
+                    if (connectedUser != null) {
                         SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putString(login, emailAddress);
-                        editor.putString(password, passwordValue);
-                        editor.putString(ip, ipValue);
-                        editor.putString(port, portValue);
+                        editor.putString(login, connectedUser.getEmailAddress());
+                        editor.putString(password, connectedUser.getPassword());
+                        editor.putString(ip, connectedUser.getIpValue());
+                        editor.putString(port, connectedUser.getPortValue());
+                        editor.putBoolean(isAdmin, connectedUser.isAdmin());
                         editor.commit();
 
                         Intent plugsControlActivityIntent = new Intent(getActivity(), PlugsControlActivity.class);
@@ -89,23 +91,8 @@ public class LogInFragment extends Fragment {
 
                 }
             });
-            checkUserTask.send(new User(emailAddress, passwordValue, ipValue, portValue));
+            checkUserTask.send(new User.UserBuilder(emailAddress, passwordValue).ipAddress(ipValue).portAddress(portValue).build());
         }
-    }
-
-    public static SharedPreferences getSharedPreferenceFile() {
-        return sharedpreferences;
-    }
-
-    public static String getB64Auth() {
-        if (sharedpreferences != null) {
-            String pass = sharedpreferences.getString(password, "");
-            String userLogin = sharedpreferences.getString(login, "");
-            String source = userLogin + ":" + pass;
-            String ret = "Basic " + Base64.encodeToString(source.getBytes(), Base64.URL_SAFE | Base64.NO_WRAP);
-            return ret;
-        }
-        return null;
     }
 
     public static String getB64Auth(String login, String pass) {
@@ -120,8 +107,9 @@ public class LogInFragment extends Fragment {
             String userLogin = sharedpreferences.getString(login, "");
             String ipValue = sharedpreferences.getString(ip, "");
             String hostValue = sharedpreferences.getString(port, "");
+            boolean userIsAdmin = sharedpreferences.getBoolean(isAdmin, false);
 
-            return new User(userLogin, pass, ipValue, hostValue);
+            return new User.UserBuilder(userLogin, pass).ipAddress(ipValue).portAddress(hostValue).isAdmin(userIsAdmin).build();
         }
         return null;
     }

@@ -2,8 +2,12 @@ package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
 import android.os.AsyncTask;
 
+import org.json.JSONException;
+
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,10 +33,10 @@ public class CheckUserTask {
         this.onResponseListener = onResponseListener;
     }
 
-    private class HttpCheckUserTask extends AsyncTask<User, Void, Boolean> {
+    private class HttpCheckUserTask extends AsyncTask<User, Void, User> {
 
         @Override
-        protected Boolean doInBackground(User... args) {
+        protected User doInBackground(User... args) {
             User loggingInUser = args[0];
             HttpURLConnection conn = null;
             try {
@@ -46,18 +50,27 @@ public class CheckUserTask {
                 switch (status) {
                     case 200:
                     case 201:
-                        return true;
+                        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line + "\n");
+                        }
+                        br.close();
+                        return JSONUserParser.parse(sb.toString(), loggingInUser);
                 }
             } catch (MalformedURLException e) {
                 onResponseListener.onError(e.getMessage());
             } catch (IOException e) {
+                onResponseListener.onError(e.getMessage());
+            } catch (JSONException e) {
                 onResponseListener.onError(e.getMessage());
             } finally {
                 if (conn != null) {
                     conn.disconnect();
                 }
             }
-            return false;
+            return null;
         }
 
         @Override
@@ -67,9 +80,9 @@ public class CheckUserTask {
         }
 
         @Override
-        protected void onPostExecute(Boolean isAuthenticated) {
-            super.onPostExecute(isAuthenticated);
-            onResponseListener.onResponse(isAuthenticated);
+        protected void onPostExecute(User connectedUser) {
+            super.onPostExecute(connectedUser);
+            onResponseListener.onResponse(connectedUser);
         }
     }
 }

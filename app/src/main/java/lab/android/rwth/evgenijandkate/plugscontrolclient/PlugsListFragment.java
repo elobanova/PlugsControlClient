@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.adapter.PlugsListAdapter;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.AddPlugRequest;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.DeletePlugRequest;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListener;
@@ -48,12 +50,15 @@ public class PlugsListFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Put divider between items and FooterView
-        getListView().setFooterDividersEnabled(true);
-        LinearLayout footerView = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.footer_view, null);
-        getListView().addFooterView(footerView);
-        initAddPlugButton();
-        initDeletePlugButton();
+        User connectedUser = LogInFragment.getConnectedUser();
+        if (connectedUser != null && connectedUser.isAdmin()) {
+            // Put divider between items and FooterView
+            getListView().setFooterDividersEnabled(true);
+            LinearLayout footerView = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.footer_view, null);
+            getListView().addFooterView(footerView);
+            initAddPlugButton();
+            initDeletePlugButton();
+        }
     }
 
     private void initAddPlugButton() {

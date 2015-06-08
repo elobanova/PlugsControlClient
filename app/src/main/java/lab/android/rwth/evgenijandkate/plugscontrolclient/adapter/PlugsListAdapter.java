@@ -13,8 +13,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.R;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.StateEnum;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListener;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.StateChangeRequest;
 
@@ -28,21 +30,27 @@ public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
+        View view = null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        User connectedUser = LogInFragment.getConnectedUser();
         if (convertView == null) {
-            view = inflater.inflate(R.layout.plugs_list_item, parent, false);
+            if (connectedUser != null) {
+                view = inflater.inflate(connectedUser.isAdmin() ? R.layout.plugs_list_item : R.layout.plugs_limited_list_item, parent, false);
+            }
         } else {
             view = convertView;
         }
         if (view instanceof LinearLayout) {
-            final IListItem item = (IListItem) getItem(position);
+            final IListItem item = getItem(position);
             TextView plugName = (TextView) view.findViewById(R.id.plug_name_in_list);
             plugName.setText(item.getListItemLabel());
 
             initSwitcher(view, item);
-            initCheck(view, item, parent);
+
+            if (connectedUser != null && connectedUser.isAdmin()) {
+                initCheck(view, item, parent);
+            }
         }
         return view;
     }
