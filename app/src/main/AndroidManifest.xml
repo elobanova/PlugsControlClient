@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".PlugsControlActivity"></activity>
         <activity android:name=".AddPlugActivity"></activity>
+        <activity android:name=".authorization.ActivityWithLogoutMenu"></activity>
     </application>
 
 </manifest>

@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
+
 /**
  * Created by ekaterina on 04.06.2015.
  */
@@ -58,5 +60,10 @@ public abstract class AbstractListAdapter<T extends Serializable> extends BaseAd
 
     public List<T> getItems() {
         return items;
+    }
+
+    public void removeAll(List<IListItem> itemsToDelete) {
+        items.removeAll(itemsToDelete);
+        notifyDataSetChanged();
     }
 }

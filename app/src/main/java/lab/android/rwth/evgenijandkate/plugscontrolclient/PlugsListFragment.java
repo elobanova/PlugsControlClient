@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.adapter.PlugsListAdapter;
@@ -81,11 +82,7 @@ public class PlugsListFragment extends ListFragment {
                     @Override
                     public void onResponse(Boolean responseOK) {
                         if (responseOK) {
-                            for (int i = 0; i < adapter.getCount(); i++) {
-                                if (adapter.getItem(i).isChecked()) {
-                                    adapter.remove(i);
-                                }
-                            }
+                            removeCheckedItems();
                             deletePlugsButton.setEnabled(adapter.atLeastOneItemIsChecked());
                         }
                     }
@@ -98,6 +95,17 @@ public class PlugsListFragment extends ListFragment {
                 deletePlugRequest.send();
             }
         });
+    }
+
+    private void removeCheckedItems() {
+        List<IListItem> itemsToDelete = new ArrayList<>();
+        for (IListItem adapterItem : adapter.getItems()) {
+            if (adapterItem.isChecked()) {
+                itemsToDelete.add(adapterItem);
+            }
+        }
+
+        adapter.removeAll(itemsToDelete);
     }
 
     private void addItemsToAdapter() {
