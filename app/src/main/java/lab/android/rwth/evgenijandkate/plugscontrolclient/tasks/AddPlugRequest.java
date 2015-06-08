@@ -2,6 +2,9 @@ package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
 import android.os.AsyncTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -17,6 +20,10 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
  * Created by ekaterina on 07.06.2015.
  */
 public class AddPlugRequest {
+    public static final String NAME_PROPERTY = "name";
+    public static final String HOUSE_CODE_PROPERTY = "house_code";
+    public static final String SWITCH_CODE_PROPERTY = "switch_code";
+    public static final String STATE_PROPERTY = "state";
     private OnResponseListener onResponseListener;
 
     public void send(PlugTransferableData plugData) {
@@ -36,22 +43,20 @@ public class AddPlugRequest {
             if (connectedUser == null) return false;
             try {
                 PlugTransferableData plugData = args[0];
-                String urlParameters =
-                        "name=" + URLEncoder.encode(plugData.getName(), "UTF-8") +
-                                "&house_code=" + URLEncoder.encode(plugData.getHouseCode(), "UTF-8") +
-                                "&switch_code=" + URLEncoder.encode(plugData.getSwitchCode(), "UTF-8") +
-                                "&state=" + URLEncoder.encode(plugData.getState().getName(), "UTF-8");
+                JSONObject plugAsJson = new JSONObject();
+                plugAsJson.put(NAME_PROPERTY, plugData.getName());
+                plugAsJson.put(HOUSE_CODE_PROPERTY, plugData.getHouseCode());
+                plugAsJson.put(SWITCH_CODE_PROPERTY, plugData.getSwitchCode());
+                plugAsJson.put(STATE_PROPERTY, plugData.getState().getName());
 
                 URL url = new URL("http://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs");
 
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
-                conn.setRequestProperty("Content-Type",
-                        "application/x-www-form-urlencoded");
-
+                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
                 conn.setRequestProperty("Content-Length", "" +
-                        Integer.toString(urlParameters.getBytes().length));
+                        Integer.toString(plugAsJson.toString().length()));
                 conn.setRequestProperty("Content-Language", "en-US");
 
                 conn.setUseCaches(false);
@@ -60,7 +65,7 @@ public class AddPlugRequest {
 
                 DataOutputStream dataOutputStream = new DataOutputStream(
                         conn.getOutputStream());
-                dataOutputStream.writeBytes(urlParameters);
+                dataOutputStream.write(plugAsJson.toString().getBytes("UTF-8"));
                 dataOutputStream.flush();
                 dataOutputStream.close();
 
@@ -73,6 +78,8 @@ public class AddPlugRequest {
             } catch (MalformedURLException e) {
                 onResponseListener.onError(e.getMessage());
             } catch (IOException e) {
+                onResponseListener.onError(e.getMessage());
+            } catch (JSONException e) {
                 onResponseListener.onError(e.getMessage());
             } finally {
                 if (conn != null) {
