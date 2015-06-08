@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PlugsControlClient</string>
+    <string name="app_name">Plugs Control Client</string>
 
     <string name="action_settings">Settings</string>
     <string name="add_plug_button_text">Add</string>
@@ -17,4 +17,5 @@
     <string name="enter_switch_code">Switch code:</string>
     <string name="login_ip_label">Host IP:</string>
     <string name="login_port_label">Host Port:</string>
+    <string name="logout_menu_label">Log out</string>
 </resources>

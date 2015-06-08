@@ -63,7 +63,7 @@ public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
         }
     }
 
-    private boolean atLeastOneItemIsChecked() {
+    public boolean atLeastOneItemIsChecked() {
         if (this.items != null) {
             for (IListItem listItem : this.items) {
                 if (listItem.isChecked()) {

@@ -1,10 +1,11 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient.authorization;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,6 @@ import android.widget.EditText;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.R;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
-import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.AddPlugRequest;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.CheckUserTask;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListener;
 
@@ -23,7 +23,6 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListen
  * Created by ekaterina on 07.06.2015.
  */
 public class LogInFragment extends Fragment {
-    public static final String USER_TAG = "user";
     public static final String MyPREFERENCES = "MyPrefs";
     public static final String login = "loginKey";
     public static final String password = "passwordKey";
@@ -81,7 +80,6 @@ public class LogInFragment extends Fragment {
                         editor.commit();
 
                         Intent plugsControlActivityIntent = new Intent(getActivity(), PlugsControlActivity.class);
-                        plugsControlActivityIntent.putExtra(USER_TAG, new User(emailAddress, passwordValue));
                         startActivity(plugsControlActivityIntent);
                     }
                 }
@@ -126,5 +124,18 @@ public class LogInFragment extends Fragment {
             return new User(userLogin, pass, ipValue, hostValue);
         }
         return null;
+    }
+
+    public static void performLogout(Activity currentActivity) {
+        if (sharedpreferences != null) {
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.clear();
+            editor.commit();
+
+            //redirect to the login screen
+            Intent redirectToLoginIntent = new Intent(currentActivity, SignInActivity.class);
+            currentActivity.startActivity(redirectToLoginIntent);
+            currentActivity.finish();
+        }
     }
 }

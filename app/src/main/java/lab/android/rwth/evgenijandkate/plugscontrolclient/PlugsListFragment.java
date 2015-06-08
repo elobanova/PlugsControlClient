@@ -86,6 +86,7 @@ public class PlugsListFragment extends ListFragment {
                                     adapter.remove(i);
                                 }
                             }
+                            deletePlugsButton.setEnabled(adapter.atLeastOneItemIsChecked());
                         }
                     }
 

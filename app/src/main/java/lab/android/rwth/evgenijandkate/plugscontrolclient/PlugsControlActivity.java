@@ -3,9 +3,14 @@ package lab.android.rwth.evgenijandkate.plugscontrolclient;
 import android.app.FragmentManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
 
 public class PlugsControlActivity extends FragmentActivity {
     private final static String FRAGMENT_TAG = "data";
+    public static final int MENU_LOGOUT = Menu.FIRST;
     private PlugsControlFragment controlFragment;
 
     @Override
@@ -28,6 +33,25 @@ public class PlugsControlActivity extends FragmentActivity {
         super.onResume();
         if (controlFragment != null) {
             controlFragment.refreshList();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, R.string.logout_menu_label);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_LOGOUT:
+                LogInFragment.performLogout(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
