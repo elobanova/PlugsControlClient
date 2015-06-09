@@ -8,7 +8,7 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.R;
 
 /**
  * Created by ekaterina on 07.06.2015.
- * <p/>
+ *
  * An activity which holds the LogInFragment to be shown to the user when he first launches the application
  * or logs out from one of its activities.
  */

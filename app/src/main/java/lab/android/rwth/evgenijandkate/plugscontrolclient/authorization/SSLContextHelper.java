@@ -45,9 +45,7 @@ public class SSLContextHelper {
             ca = cf.generateCertificate(ins);
             System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
 
-
             ins.close();
-
 
             // Create a KeyStore containing our trusted CAs
             String keyStoreType = KeyStore.getDefaultType();
@@ -84,15 +82,12 @@ public class SSLContextHelper {
     }
 
     public static HostnameVerifier getHostnameVerifier() {
-
-
         HostnameVerifier hostnameVerifier = new HostnameVerifier() {
             @Override
             public boolean verify(String hostname, SSLSession session) {
                 //HostnameVerifier hv =
-                        //HttpsURLConnection.getDefaultHostnameVerifier();
+                //HttpsURLConnection.getDefaultHostnameVerifier();
                 //return hv.verify("example.com", session);
-
 
                 //NOTE: IN PRODUCTION MODE WE NEED TO PUT THE HOSTNAME HERE WE ARE GOING TO TRUST
                 return true;
@@ -100,5 +95,4 @@ public class SSLContextHelper {
         };
         return hostnameVerifier;
     }
-
 }

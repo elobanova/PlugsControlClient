@@ -11,11 +11,19 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFra
 
 /**
  * Created by ekaterina on 07.06.2015.
+ * 
+ * An activity holding the fragment for adding a new plug.
+ * This activity will be started only if the user has administrative rights.
  */
 public class AddPlugActivity extends ActivityWithLogoutMenu {
     private final static String FRAGMENT_TAG = "add";
     private AddPlugFragment addPlugFragment;
 
+    /**
+     * Creates or restores the AddPlugFragment instance if it was already created.
+     *
+     * @param savedInstanceState a bundle instance with the saved state before recreation
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
