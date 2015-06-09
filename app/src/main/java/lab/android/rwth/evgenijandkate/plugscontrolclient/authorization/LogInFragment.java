@@ -22,6 +22,11 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListen
 
 /**
  * Created by ekaterina on 07.06.2015.
+ *
+ * A fragment which will be initially shown to the user for him to log in.
+ * The logged in information is then stored in the preferences, e.g. his user name,
+ * password, ip he is connecting to and the port, if the user has administrative rights,
+ * all the checks are done through http get tasks and via authenticating api.
  */
 public class LogInFragment extends Fragment {
     public static final String MyPREFERENCES = "MyPrefs";
@@ -40,6 +45,18 @@ public class LogInFragment extends Fragment {
         sharedpreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
     }
 
+    /**
+     * A log in screen will be inflated displying the entries for user logging name, password,
+     * ip address and port number of the host he is about to connect to and a login button,
+     * which has an onClick listener contacting the authorising api via async task.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state.
+     * @return a fragment's view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.login_fragment, container, false);
@@ -94,12 +111,25 @@ public class LogInFragment extends Fragment {
         }
     }
 
+    /**
+     * Encodes the user's logging name and password as a base64 string to be sent to the server.
+     *
+     * @param login a user's logging name
+     * @param pass  a user's password
+     * @return the encoded string, containing user's logging name and password as a base64 string
+     */
     public static String getB64Auth(String login, String pass) {
         String source = login + ":" + pass;
         String ret = "Basic " + Base64.encodeToString(source.getBytes(), Base64.URL_SAFE | Base64.NO_WRAP);
         return ret;
     }
 
+    /**
+     * Retrieves the connected user from the preferences file, where the logged in information is stored,
+     * e.g. his user name, password, ip he is connecting to, the port and if the user has administrative rights or not.
+     *
+     * @return a connected user or null if no user is connected
+     */
     public static User getConnectedUser() {
         if (sharedpreferences != null) {
             String pass = sharedpreferences.getString(password, "");
@@ -113,6 +143,12 @@ public class LogInFragment extends Fragment {
         return null;
     }
 
+    /**
+     * Logges out the user from the system by removing his session information
+     * from the preference file. The user then is redirected to the initial log in page.
+     *
+     * @param currentActivity the activity from which action bar the user picked a log out option.
+     */
     public static void performLogout(Activity currentActivity) {
         if (sharedpreferences != null) {
             SharedPreferences.Editor editor = sharedpreferences.edit();
