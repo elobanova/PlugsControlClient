@@ -23,6 +23,11 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListen
 
 /**
  * Created by ekaterina on 04.06.2015.
+ *
+ * A fragment holding a list (and a footer if the user has administrative rights) of available plugs.
+ * The single list view item consists of a human readable name and a switch control to change the state of the plug.
+ * If the user has administrative rights, he/she will also see the checkboxes on the left side of every item
+ * to select the plugs which he/she wants to remove.
  */
 public class PlugsListFragment extends ListFragment {
     public static final String PLUGS_LIST_KEY = "PLUGS";
@@ -41,6 +46,13 @@ public class PlugsListFragment extends ListFragment {
         return fragment;
     }
 
+    /**
+     * Creates the PlugsListFragment instance and sets the adapter for the list of plug items.
+     * As before a view is created, the listview needs to be updated if plugs were turned on
+     * or off by other user, therefore connect to web socket notification server.
+     *
+     * @param savedInstanceState a bundle instance with the saved state before recreation
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +61,7 @@ public class PlugsListFragment extends ListFragment {
         this.adapter = new PlugsListAdapter(getActivity().getApplicationContext());
         setListAdapter(this.adapter);
         addItemsToAdapter();
-        //as before a view is created, the listview needs to be updated if plugs were turned on or off by
-        //other user, therefore connect to web socket notification server
+
         plugUpdateClient = new PlugUpdateClient(getActivity());
         plugUpdateClient.setOnPlugUpdateListener(new PlugUpdateClient.OnPlugUpdateListener() {
             @Override
@@ -66,6 +77,13 @@ public class PlugsListFragment extends ListFragment {
         plugUpdateClient.subscribe();
     }
 
+    /**
+     * When the list view with all the plugs has already been created, the footer with "Add" and
+     * "Delete" buttons are added only if the user has administrative rights.
+     *
+     * @param view               a created view
+     * @param savedInstanceState a bundle with the saved data
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -145,6 +163,10 @@ public class PlugsListFragment extends ListFragment {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * A method is called when the fragment is being destroyed.
+     * The update client's unsubscribe() method is called here.
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();

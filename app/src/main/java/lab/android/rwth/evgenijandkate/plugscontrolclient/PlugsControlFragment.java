@@ -16,7 +16,7 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.PlugsListGetRequ
 
 /**
  * Created by ekaterina on 04.06.2015.
- * 
+ *
  * The fragment for holding the list displaying all available plugs.
  * If the user has administrative rights, he/she will be also presented with the
  * add and delete buttons, letting him/her add or remove plugs as well as change their state.

@@ -81,10 +81,7 @@ public class PlugUpdateClient {
         }
         URI uri;
         try {
-
-
             uri = new URI("wss://" + connectedUser.getIpValue() + ":" + (Integer.parseInt(connectedUser.getPortValue()) + 1));
-
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;
@@ -116,14 +113,12 @@ public class PlugUpdateClient {
                         //not successfull message
                         if (!message.equals(SUCCESS_SUBSCRIBE) && !message.equals(SUCCESS_UNSUBSCRIBE) &&
                                 !message.equals(NOT_AUTHENTICATED)) {
-
                             try {
                                 IListItem updatedItem = JSONPlugsParser.parseItem(message);
                                 onPlugUpdateListener.onUpdate(updatedItem);
                             } catch (JSONException e) {
                                 onPlugUpdateListener.onError(e.getMessage());
                             }
-
                         }
                         if (message.equals(NOT_AUTHENTICATED))
                             onPlugUpdateListener.onError(message);
@@ -141,11 +136,8 @@ public class PlugUpdateClient {
                 onPlugUpdateListener.onError(e.getMessage());
             }
         };
-
-
         mWebSocketClient.setWebSocketFactory(new DefaultSSLWebSocketClientFactory(SSLContextHelper.initSSLContext(hostActivity)));
         mWebSocketClient.connect();
-
     }
 
     public void unsubscribe() {
@@ -155,6 +147,5 @@ public class PlugUpdateClient {
     public void setOnPlugUpdateListener(OnPlugUpdateListener onPlugUpdateListener) {
         this.onPlugUpdateListener = onPlugUpdateListener;
     }
-
 
 }
