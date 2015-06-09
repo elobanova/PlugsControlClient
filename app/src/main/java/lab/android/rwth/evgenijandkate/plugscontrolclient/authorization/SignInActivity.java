@@ -8,11 +8,19 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.R;
 
 /**
  * Created by ekaterina on 07.06.2015.
+ * <p/>
+ * An activity which holds the LogInFragment to be shown to the user when he first launches the application
+ * or logs out from one of its activities.
  */
 public class SignInActivity extends FragmentActivity {
     private final static String FRAGMENT_TAG = "login_fragment";
     private LogInFragment loginFragment;
 
+    /**
+     * Creates or restores the LogInFragment instance if it was already created.
+     *
+     * @param savedInstanceState a bundle instance with the saved state before recreation
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

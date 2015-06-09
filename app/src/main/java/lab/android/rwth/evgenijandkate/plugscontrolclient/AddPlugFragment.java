@@ -96,6 +96,8 @@ public class AddPlugFragment extends Fragment {
                     public void onResponse(Boolean responseOK) {
                         if (responseOK) {
                             getActivity().finish();
+                        } else {
+                            onError(getResources().getString(R.string.failed_to_add_plug_message));
                         }
                     }
 

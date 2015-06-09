@@ -2,6 +2,10 @@ package lab.android.rwth.evgenijandkate.plugscontrolclient.model;
 
 /**
  * Created by ekaterina on 04.06.2015.
+ *
+ * An implementation of IListItem.java. The PlugItem is being used as a type of items in the
+ * plugs list adapter set for the list view, from which the user can manage the plugs.
+ * All the methods are implemented from an interface IListItem.java.
  */
 public class PlugItem implements IListItem {
     private final int id;
@@ -23,10 +27,6 @@ public class PlugItem implements IListItem {
     @Override
     public String getListItemLabel() {
         return this.name;
-    }
-
-    public void setListItemLabel(String name) {
-        this.name = name;
     }
 
     @Override
