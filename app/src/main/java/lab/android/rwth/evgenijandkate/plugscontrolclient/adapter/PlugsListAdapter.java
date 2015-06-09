@@ -23,16 +23,32 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.StateChangeReque
 
 /**
  * Created by ekaterina on 04.06.2015.
+ *
+ * An implementation of lab.android.rwth.evgenijandkate.plugscontrolclient.adapter.AbstractListAdapter
+ * with the type IListItem.
  */
 public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
 
     public static final String TAG = "Plugs_client";
 
     public PlugsListAdapter(Context context) {
-
         super(context);
     }
 
+    /**
+     * This method is responsible for inflating the view of a single list view item.
+     * If the user has administrative rights, R.layout.plugs_list_item will be used as a single view
+     * item's layout. Otherwise, a limited R.layout.plugs_limited_list_item template will be taken to be inflated as
+     * a single view list item.
+     *
+     * @param position    The position of the item within the adapter's data set of the item whose view
+     *                    we want.
+     * @param convertView The old view to reuse, if possible. We check that this view
+     *                    is non-null and of an appropriate type before using. If it is not possible to convert
+     *                    this view to display the correct data, this method creates a new view.
+     * @param parent      The parent that this view will eventually be attached to.
+     * @return A View corresponding to the data at the specified position.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = null;
@@ -76,6 +92,11 @@ public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
         }
     }
 
+    /**
+     * Determines if at least one adapter's item was checked with the check box's event
+     *
+     * @return true if at least one adapter's item is selected
+     */
     public boolean atLeastOneItemIsChecked() {
         if (this.items != null) {
             for (IListItem listItem : this.items) {
@@ -95,7 +116,7 @@ public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 final StateEnum oldState = item.getState();
                 item.setState(isChecked ? StateEnum.ON : StateEnum.OFF);
-                StateChangeRequest stateChangeRequest = new StateChangeRequest(item,PlugsListAdapter.this.context );
+                StateChangeRequest stateChangeRequest = new StateChangeRequest(item, PlugsListAdapter.this.context);
                 stateChangeRequest.setOnResponseListener(new OnResponseListener<Boolean>() {
 
                     @Override
