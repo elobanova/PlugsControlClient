@@ -1,13 +1,9 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.ActivityWithLogoutMenu;
-import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
 
 /**
  * Created by ekaterina on 07.06.2015.

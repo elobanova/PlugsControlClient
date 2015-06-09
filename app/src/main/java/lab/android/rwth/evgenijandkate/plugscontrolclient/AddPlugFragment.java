@@ -22,7 +22,7 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListen
 
 /**
  * Created by ekaterina on 07.06.2015.
- * 
+ *
  * The fragment for adding a new plug.
  * This functionality will be available only if the user has administrative rights.
  */

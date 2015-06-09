@@ -5,10 +5,22 @@ import android.os.Bundle;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.ActivityWithLogoutMenu;
 
+/**
+ * Created by ekaterina on 07.06.2015.
+ * 
+ * An activity holding the fragment for controlling all the plugs.
+ * This activity will be extended with the list fragment, allowing for the control
+ * of the existing plugs.
+ */
 public class PlugsControlActivity extends ActivityWithLogoutMenu {
     private final static String FRAGMENT_TAG = "data";
     private PlugsControlFragment controlFragment;
 
+    /**
+     * Creates or restores the PlugsControlFragment instance if it was already created.
+     *
+     * @param savedInstanceState a bundle instance with the saved state before recreation
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
