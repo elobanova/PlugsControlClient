@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -34,11 +35,6 @@ public class PlugsControlFragment extends Fragment {
         getRequest.setOnResponseListener(new OnResponseListener<List<IListItem>>() {
 
             @Override
-            public void onPreExecute() {
-
-            }
-
-            @Override
             public void onResponse(List<IListItem> items) {
                 FragmentManager fragmentManager = getFragmentManager();
                 //fetch the fragment if it was saved (e.g. during orientation change)
@@ -52,7 +48,7 @@ public class PlugsControlFragment extends Fragment {
 
             @Override
             public void onError(String errorMessage) {
-
+                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
         getRequest.send();

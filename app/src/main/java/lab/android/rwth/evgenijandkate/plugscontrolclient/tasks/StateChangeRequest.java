@@ -66,12 +66,6 @@ public class StateChangeRequest {
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            onResponseListener.onPreExecute();
-        }
-
-        @Override
         protected void onPostExecute(Boolean statusChangedSuccessfully) {
             super.onPostExecute(statusChangedSuccessfully);
             onResponseListener.onResponse(statusChangedSuccessfully);

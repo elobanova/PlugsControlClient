@@ -50,9 +50,7 @@ public class PlugUpdateClient {
         this.hostActivity = hostActivity;
     }
 
-
     public void subscribe() {
-
         User connectedUser = LogInFragment.getConnectedUser();
         if (connectedUser == null) {
             onPlugUpdateListener.onError("not logged in");
@@ -60,20 +58,16 @@ public class PlugUpdateClient {
         }
         URI uri;
         try {
-
-            uri = new URI("ws://"+connectedUser.getIpValue()+":"+(Integer.parseInt(connectedUser.getPortValue())+1));
+            uri = new URI("ws://" + connectedUser.getIpValue() + ":" + (Integer.parseInt(connectedUser.getPortValue()) + 1));
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;
         }
 
-
-
         //set Authorization header to authenticate the web socket handshake
         //otherwise connection will be rejected by server
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
-
 
         //use draft no 10: as defined in https://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
         mWebSocketClient = new WebSocketClient(uri, new Draft_10(), headers, 0) {
@@ -83,7 +77,6 @@ public class PlugUpdateClient {
 
                 //the only to messages we send to notification web server: SUBSCRIBE, UNSUBSCRIBE
                 mWebSocketClient.send(SUBSCRIBE);
-
             }
 
             @Override
@@ -98,20 +91,16 @@ public class PlugUpdateClient {
                         if (!message.equals(SUCCESS_SUBSCRIBE) && !message.equals(SUCCESS_UNSUBSCRIBE) &&
                                 !message.equals(NOT_AUTHENTICATED)) {
 
-                            IListItem updatedItem = null;
                             try {
-                                updatedItem = JSONPlugsParser.parseItem(message);
+                                IListItem updatedItem = JSONPlugsParser.parseItem(message);
                                 onPlugUpdateListener.onUpdate(updatedItem);
                             } catch (JSONException e) {
                                 onPlugUpdateListener.onError(e.getMessage());
                             }
 
-
                         }
                         if (message.equals(NOT_AUTHENTICATED))
                             onPlugUpdateListener.onError(message);
-
-
                     }
                 });
             }
@@ -123,7 +112,6 @@ public class PlugUpdateClient {
 
             @Override
             public void onError(Exception e) {
-
                 onPlugUpdateListener.onError(e.getMessage());
             }
         };

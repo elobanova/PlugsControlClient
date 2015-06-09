@@ -18,4 +18,5 @@
     <string name="login_ip_label">Host IP:</string>
     <string name="login_port_label">Host Port:</string>
     <string name="logout_menu_label">Log out</string>
+    <string name="failed_to_login_message">Failed to login. Please, check your credentials to be correct.</string>
 </resources>

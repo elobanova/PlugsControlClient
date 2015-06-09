@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.R;
@@ -65,10 +66,6 @@ public class LogInFragment extends Fragment {
 
             CheckUserTask checkUserTask = new CheckUserTask();
             checkUserTask.setOnResponseListener(new OnResponseListener<User>() {
-                @Override
-                public void onPreExecute() {
-
-                }
 
                 @Override
                 public void onResponse(User connectedUser) {
@@ -83,12 +80,14 @@ public class LogInFragment extends Fragment {
 
                         Intent plugsControlActivityIntent = new Intent(getActivity(), PlugsControlActivity.class);
                         startActivity(plugsControlActivityIntent);
+                    } else {
+                        onError(getResources().getString(R.string.failed_to_login_message));
                     }
                 }
 
                 @Override
                 public void onError(String errorMessage) {
-
+                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
             });
             checkUserTask.send(new User.UserBuilder(emailAddress, passwordValue).ipAddress(ipValue).portAddress(portValue).build());

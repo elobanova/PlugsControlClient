@@ -25,9 +25,6 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListen
  * Created by ekaterina on 04.06.2015.
  */
 public class PlugsListFragment extends ListFragment {
-
-
-
     public static final String PLUGS_LIST_KEY = "PLUGS";
     private static final int ADD_PLUG_REQUEST = 0;
     private static final String TAG = PlugsListFragment.class.getCanonicalName();
@@ -54,7 +51,7 @@ public class PlugsListFragment extends ListFragment {
         addItemsToAdapter();
         //as before a view is created, the listview needs to be updated if plugs were turned on or off by
         //other user, therefore connect to web socket notification server
-        plugUpdateClient=new PlugUpdateClient(getActivity());
+        plugUpdateClient = new PlugUpdateClient(getActivity());
         plugUpdateClient.setOnPlugUpdateListener(new PlugUpdateClient.OnPlugUpdateListener() {
             @Override
             public void onUpdate(IListItem updatedItem) {
@@ -67,11 +64,7 @@ public class PlugsListFragment extends ListFragment {
             }
         });
         plugUpdateClient.subscribe();
-
     }
-
-
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -84,9 +77,6 @@ public class PlugsListFragment extends ListFragment {
             getListView().addFooterView(footerView);
             initAddPlugButton();
             initDeletePlugButton();
-
-
-
         }
     }
 
@@ -108,10 +98,6 @@ public class PlugsListFragment extends ListFragment {
             public void onClick(View v) {
                 DeletePlugRequest deletePlugRequest = new DeletePlugRequest(adapter.getItems());
                 deletePlugRequest.setOnResponseListener(new OnResponseListener<Boolean>() {
-                    @Override
-                    public void onPreExecute() {
-
-                    }
 
                     @Override
                     public void onResponse(Boolean responseOK) {
@@ -123,7 +109,7 @@ public class PlugsListFragment extends ListFragment {
 
                     @Override
                     public void onError(String errorMessage) {
-
+                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
                 deletePlugRequest.send();
@@ -150,13 +136,9 @@ public class PlugsListFragment extends ListFragment {
         }
     }
 
-
-
-
-
     private void updateDisplayedItems(IListItem updatedItem) {
-        for(IListItem item: items)
-            if(item.getListItemId()==updatedItem.getListItemId()){
+        for (IListItem item : items)
+            if (item.getListItemId() == updatedItem.getListItemId()) {
                 item.setState(updatedItem.getState());
             }
 
