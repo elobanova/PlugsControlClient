@@ -16,6 +16,11 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.PlugsListGetRequ
 
 /**
  * Created by ekaterina on 04.06.2015.
+ * 
+ * The fragment for holding the list displaying all available plugs.
+ * If the user has administrative rights, he/she will be also presented with the
+ * add and delete buttons, letting him/her add or remove plugs as well as change their state.
+ * The user with the limited rights will only be allowed to change the plug's state between ON and OFF.
  */
 public class PlugsControlFragment extends Fragment {
     private final static String FRAGMENT_TAG = "list_fragment";
@@ -54,11 +59,24 @@ public class PlugsControlFragment extends Fragment {
         getRequest.send();
     }
 
+    /**
+     * Creates the plug control view, a layout is just a container for the list displaying available plugs.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state.
+     * @return a fragment's view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.plugs_control_fragment, container, false);
     }
 
+    /**
+     * Refreshes the list of available plugs.
+     */
     public void refreshList() {
         FragmentManager fragmentManager = getFragmentManager();
         fragment = (PlugsListFragment) fragmentManager.findFragmentByTag(FRAGMENT_TAG);

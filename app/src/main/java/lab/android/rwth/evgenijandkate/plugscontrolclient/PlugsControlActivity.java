@@ -7,7 +7,7 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.Activity
 
 /**
  * Created by ekaterina on 07.06.2015.
- * 
+ *
  * An activity holding the fragment for controlling all the plugs.
  * This activity will be extended with the list fragment, allowing for the control
  * of the existing plugs.
