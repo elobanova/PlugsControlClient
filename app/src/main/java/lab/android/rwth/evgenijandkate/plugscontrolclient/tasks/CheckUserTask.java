@@ -1,41 +1,41 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.SSLContextHelper;
-import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.SignInActivity;
-import lab.android.rwth.evgenijandkate.plugscontrolclient.model.PlugTransferableData;
-import lab.android.rwth.evgenijandkate.plugscontrolclient.model.StateEnum;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
 /**
  * Created by ekaterina on 07.06.2015.
+ *
+ * A class for sending an http request to authenticate a user.
+ * When the user logs in, a corresponding role (ADMIN or USER) is being received as JSON.
  */
 public class CheckUserTask {
     private Context context;
-    public CheckUserTask(Context context){
-        this.context=context;
-    }
     private OnResponseListener onResponseListener;
 
+    public CheckUserTask(Context context) {
+        this.context = context;
+    }
+
+    /**
+     * Sends a GET request to authenticate a user
+     *
+     * @param user a user's entered data
+     */
     public void send(User user) {
         new HttpCheckUserTask().execute(user);
     }

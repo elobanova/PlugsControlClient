@@ -22,6 +22,9 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
 /**
  * Created by ekaterina on 07.06.2015.
+ *
+ * A class for sending an http request for adding a new plug.
+ * When the user with administrative rights adds a new plug, a POST request is being sent to the server.
  */
 public class AddPlugRequest {
     public static final String NAME_PROPERTY = "name";
@@ -30,10 +33,17 @@ public class AddPlugRequest {
     public static final String STATE_PROPERTY = "state";
     private OnResponseListener onResponseListener;
     private Context context;
-    public AddPlugRequest(Context context){
-        this.context=context;
+
+    public AddPlugRequest(Context context) {
+        this.context = context;
     }
 
+    /**
+     * Executes a task to add a new plug to the plugs list on the server.
+     * When the user with administrative rights adds a new plug, a POST request is being sent to the server.
+     *
+     * @param plugData an object containing a new plug's data
+     */
     public void send(PlugTransferableData plugData) {
         new HttpAddPlugTask().execute(plugData);
     }
