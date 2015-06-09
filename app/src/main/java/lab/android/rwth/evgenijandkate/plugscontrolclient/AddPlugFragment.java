@@ -22,6 +22,9 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.OnResponseListen
 
 /**
  * Created by ekaterina on 07.06.2015.
+ * 
+ * The fragment for adding a new plug.
+ * This functionality will be available only if the user has administrative rights.
  */
 public class AddPlugFragment extends Fragment {
     private static final int DIGIT_MAX_VALUE = 1;
@@ -35,6 +38,19 @@ public class AddPlugFragment extends Fragment {
         setRetainInstance(true);
     }
 
+    /**
+     * A screen for adding a new plug will be inflated only if the user has administrative rights.
+     * This view consists of the entry for the plug's human readable name, the numberic pickers
+     * from which the user can construct the switch and house codes (the range is restricted to 0 and 1 only)
+     * and the initial state of the plug.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state.
+     * @return a fragment's view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_plugs_fragment, container, false);

@@ -46,7 +46,7 @@ public class LogInFragment extends Fragment {
     }
 
     /**
-     * A log in screen will be inflated displying the entries for user logging name, password,
+     * A log in screen will be inflated displaying the entries for user logging name, password,
      * ip address and port number of the host he is about to connect to and a login button,
      * which has an onClick listener contacting the authorising api via async task.
      *

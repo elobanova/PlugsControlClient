@@ -11,7 +11,7 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFra
 
 /**
  * Created by ekaterina on 07.06.2015.
- * 
+ *
  * An activity holding the fragment for adding a new plug.
  * This activity will be started only if the user has administrative rights.
  */
