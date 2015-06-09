@@ -19,13 +19,17 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
 /**
  * Created by ekaterina on 07.06.2015.
+ *
+ * A class for sending an http request for deleting plug.
+ * When the user with administrative rights removes plug, a DELETE request is being sent to the server.
  */
 public class DeletePlugRequest {
     private OnResponseListener onResponseListener;
     private List<IListItem> itemsCheckedToBeDeleted;
     private Context context;
+
     public DeletePlugRequest(List<IListItem> items, Context context) {
-        this.context=context;
+        this.context = context;
         this.itemsCheckedToBeDeleted = new ArrayList<>();
         for (IListItem listItem : items) {
             if (listItem.isChecked()) {
@@ -34,6 +38,10 @@ public class DeletePlugRequest {
         }
     }
 
+    /**
+     * Executes a task to delete a plug from the plugs list on the server.
+     * When the user with administrative rights removes plug, a DELETE request is being sent to the server.
+     */
     public void send() {
         new HttpDeletePlugTask().execute(itemsCheckedToBeDeleted);
     }

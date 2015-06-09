@@ -19,16 +19,24 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
 /**
  * Created by ekaterina on 04.06.2015.
+ *
+ * A class for sending an http request for changing the state of the plug.
+ * When the user with any rights changes the state of the plug, a GET request is being sent to the server.
  */
 public class StateChangeRequest {
     private OnResponseListener onResponseListener;
     private IListItem item;
     private Context context;
+
     public StateChangeRequest(IListItem item, Context context) {
-        this.context=context;
+        this.context = context;
         this.item = item;
     }
 
+    /**
+     * Executes a task to change the state of a plug (ON or OFF) in the plugs list on the server.
+     * When the user with any rights changes the state of the plug, a GET request is being sent to the server.
+     */
     public void send() {
         new HttpGetChangeStateTask().execute(item);
     }

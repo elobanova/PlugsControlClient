@@ -24,11 +24,17 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
 /**
  * Created by ekaterina on 04.06.2015.
+ *
+ * A class for sending an http request for getting a list of available plugs.
+ * When the user logs in and proceeds to the plug control activity, a GET request is being sent to the server.
  */
 public class PlugsListGetRequest {
     private OnResponseListener onResponseListener;
     private Context context;
 
+    /**
+     * Sends a GET request to retrieve the list of available plugs
+     */
     public void send() {
         new HttpGetPlugsTask().execute();
     }
@@ -37,8 +43,8 @@ public class PlugsListGetRequest {
         this.onResponseListener = onResponseListener;
     }
 
-    public PlugsListGetRequest(Context context){
-        this.context=context;
+    public PlugsListGetRequest(Context context) {
+        this.context = context;
     }
 
     private class HttpGetPlugsTask extends AsyncTask<Void, Void, List<IListItem>> {

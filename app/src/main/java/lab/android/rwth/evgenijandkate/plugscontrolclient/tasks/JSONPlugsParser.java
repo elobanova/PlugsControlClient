@@ -13,16 +13,33 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.model.StateEnum;
 
 /**
  * Created by ekaterina on 04.06.2015.
+ *
+ * A parser of the json data which represents the list of plugs being sent from the server.
+ * A json object has an id, a human readable name and a state of the plug.
  */
 public class JSONPlugsParser {
     private static final String ID_PROPERTY_NAME = "id";
     private static final String LABEL_PROPERTY_NAME = "name";
     private static final String STATE_PROPERTY_NAME = "state";
 
+    /**
+     * Constructs an instance of the list plug item from the json object
+     *
+     * @param jsonString a json string with the plug's data
+     * @return an instance of the list plug item
+     * @throws JSONException
+     */
     public static IListItem parseItem(String jsonString) throws JSONException {
         return parseItem(new JSONObject(jsonString));
     }
 
+    /**
+     * Constructs a list of plug items from the json array received from the server
+     *
+     * @param jsonString a json string with the plug's data
+     * @return a list of plug items
+     * @throws JSONException
+     */
     public static List<IListItem> parse(String jsonString) throws JSONException {
         List<IListItem> items = new ArrayList<>();
         JSONArray plugsList = new JSONArray(jsonString);
