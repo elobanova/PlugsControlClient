@@ -19,23 +19,19 @@ public class JSONPlugsParser {
     private static final String LABEL_PROPERTY_NAME = "name";
     private static final String STATE_PROPERTY_NAME = "state";
 
-    public static IListItem parseItem(String jsonString) throws JSONException   {
-
-            return parseItem(new JSONObject(jsonString));
-
+    public static IListItem parseItem(String jsonString) throws JSONException {
+        return parseItem(new JSONObject(jsonString));
     }
 
     public static List<IListItem> parse(String jsonString) throws JSONException {
         List<IListItem> items = new ArrayList<>();
         JSONArray plugsList = new JSONArray(jsonString);
         for (int i = 0; i < plugsList.length(); i++) {
-
             JSONObject plugJSONObject = plugsList.getJSONObject(i);
             items.add(parseItem(plugJSONObject));
         }
         return items;
     }
-
 
     private static IListItem parseItem(JSONObject plugJSONObject) throws JSONException {
         StateEnum plugState = StateEnum.valueOf(plugJSONObject.getString(STATE_PROPERTY_NAME));
@@ -43,6 +39,4 @@ public class JSONPlugsParser {
         String plugLabel = plugJSONObject.getString(LABEL_PROPERTY_NAME);
         return new PlugItem(plugId, plugLabel, plugState);
     }
-
-
 }

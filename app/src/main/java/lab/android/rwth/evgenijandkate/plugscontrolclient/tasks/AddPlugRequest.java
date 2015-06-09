@@ -101,12 +101,6 @@ public class AddPlugRequest {
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            onResponseListener.onPreExecute();
-        }
-
-        @Override
         protected void onPostExecute(Boolean isCreated) {
             super.onPostExecute(isCreated);
             onResponseListener.onResponse(isCreated);

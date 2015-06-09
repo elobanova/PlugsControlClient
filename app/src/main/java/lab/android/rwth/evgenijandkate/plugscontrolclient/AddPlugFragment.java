@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,10 +91,6 @@ public class AddPlugFragment extends Fragment {
                         switchCode.toString(), houseCode.toString(), StateEnum.valueOf(stateSpinner.getSelectedItem().toString()));
                 addPlugRequest = new AddPlugRequest(getActivity());
                 addPlugRequest.setOnResponseListener(new OnResponseListener<Boolean>() {
-                    @Override
-                    public void onPreExecute() {
-
-                    }
 
                     @Override
                     public void onResponse(Boolean responseOK) {
@@ -104,7 +101,7 @@ public class AddPlugFragment extends Fragment {
 
                     @Override
                     public void onError(String errorMessage) {
-
+                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
                 addPlugRequest.send(plugTransferableData);

@@ -87,12 +87,6 @@ public class CheckUserTask {
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            onResponseListener.onPreExecute();
-        }
-
-        @Override
         protected void onPostExecute(User connectedUser) {
             super.onPostExecute(connectedUser);
             onResponseListener.onResponse(connectedUser);

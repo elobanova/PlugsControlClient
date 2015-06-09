@@ -1,6 +1,7 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,9 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.StateChangeReque
  * Created by ekaterina on 04.06.2015.
  */
 public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
+
+    public static final String TAG = "Plugs_client";
+
     public PlugsListAdapter(Context context) {
 
         super(context);
@@ -93,10 +97,6 @@ public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
                 item.setState(isChecked ? StateEnum.ON : StateEnum.OFF);
                 StateChangeRequest stateChangeRequest = new StateChangeRequest(item,PlugsListAdapter.this.context );
                 stateChangeRequest.setOnResponseListener(new OnResponseListener<Boolean>() {
-                    @Override
-                    public void onPreExecute() {
-
-                    }
 
                     @Override
                     public void onResponse(Boolean responseOK) {
@@ -108,7 +108,7 @@ public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
 
                     @Override
                     public void onError(String errorMessage) {
-
+                        Log.e(TAG, errorMessage);
                     }
                 });
                 stateChangeRequest.send();

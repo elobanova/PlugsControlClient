@@ -44,12 +44,6 @@ public class PlugsListGetRequest {
     private class HttpGetPlugsTask extends AsyncTask<Void, Void, List<IListItem>> {
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            onResponseListener.onPreExecute();
-        }
-
-        @Override
         protected List<IListItem> doInBackground(Void... params) {
             HttpsURLConnection conn = null;
             User connectedUser = LogInFragment.getConnectedUser();
