@@ -8,10 +8,8 @@ import org.json.JSONObject;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -73,7 +71,7 @@ public class AddPlugRequest {
                 conn.setSSLSocketFactory(SSLContextHelper.initSSLContext(context).getSocketFactory());
                 conn.setHostnameVerifier(SSLContextHelper.getHostnameVerifier());
                 conn.setRequestMethod("POST");
-                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
+                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getUserAccountName(), connectedUser.getPassword()));
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
                 conn.setRequestProperty("Content-Length", "" +
                         Integer.toString(plugAsJson.toString().length()));

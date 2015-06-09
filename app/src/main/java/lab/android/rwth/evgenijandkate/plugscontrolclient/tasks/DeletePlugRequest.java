@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -72,7 +71,7 @@ public class DeletePlugRequest {
                 conn.setSSLSocketFactory(SSLContextHelper.initSSLContext(context).getSocketFactory());
                 conn.setHostnameVerifier(SSLContextHelper.getHostnameVerifier());
                 conn.setRequestMethod("DELETE");
-                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
+                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getUserAccountName(), connectedUser.getPassword()));
                 conn.setDoInput(true);
                 conn.connect();
                 int status = conn.getResponseCode();

@@ -49,14 +49,22 @@ public class CheckUserTask {
         @Override
         protected User doInBackground(User... args) {
             User loggingInUser = args[0];
+
+            String ipValue = loggingInUser.getIpValue();
+            String portValue = loggingInUser.getPortValue();
+            if (ipValue == null || ipValue.isEmpty() || portValue == null || portValue.isEmpty()) {
+                onResponseListener.onError("Connection parameters are missing");
+                return null;
+            }
+
             HttpsURLConnection conn = null;
             try {
-                URL url = new URL("https://" + loggingInUser.getIpValue() + ":" + loggingInUser.getPortValue() + "/api/authenticate");
+                URL url = new URL("https://" + ipValue + ":" + portValue + "/api/authenticate");
                 conn = (HttpsURLConnection) url.openConnection();
                 conn.setSSLSocketFactory(SSLContextHelper.initSSLContext(context).getSocketFactory());
                 conn.setHostnameVerifier(SSLContextHelper.getHostnameVerifier());
                 conn.setRequestMethod("GET");
-                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(loggingInUser.getEmailAddress(), loggingInUser.getPassword()));
+                conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(loggingInUser.getUserAccountName(), loggingInUser.getPassword()));
                 conn.setDoInput(true);
                 conn.connect();
                 int status = conn.getResponseCode();

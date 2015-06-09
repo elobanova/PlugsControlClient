@@ -10,7 +10,7 @@ import java.io.Serializable;
  * being stored. In order to set all these values a builder pattern is used.
  */
 public class User implements Serializable {
-    private String emailAddress;
+    private String userAccountName;
     private String password;
     private String ipValue;
     private String portValue;
@@ -19,7 +19,7 @@ public class User implements Serializable {
     private boolean isAdmin = false;
 
     private User(UserBuilder builder) {
-        this.emailAddress = builder.nestedEmailAddress;
+        this.userAccountName = builder.nestedUserAccountName;
         this.password = builder.nestedPassword;
         this.ipValue = builder.nestedIpValue;
         this.portValue = builder.nestedPortValue;
@@ -27,12 +27,12 @@ public class User implements Serializable {
     }
 
     /**
-     * Returns the user's login
+     * Returns the user's account name
      *
-     * @return the user's login
+     * @return the user's account name
      */
-    public String getEmailAddress() {
-        return this.emailAddress;
+    public String getUserAccountName() {
+        return this.userAccountName;
     }
 
     /**
@@ -75,7 +75,7 @@ public class User implements Serializable {
      * A builder pattern class through which the user's data is being built.
      */
     public static class UserBuilder {
-        private String nestedEmailAddress;
+        private String nestedUserAccountName;
         private String nestedPassword;
         private String nestedIpValue;
         private String nestedPortValue;
@@ -83,13 +83,13 @@ public class User implements Serializable {
         private String nestedLastName;
         private boolean nestedIsAdmin;
 
-        public UserBuilder(String nestedEmailAddress, String nestedPassword) {
-            this.nestedEmailAddress = nestedEmailAddress;
+        public UserBuilder(String accountName, String nestedPassword) {
+            this.nestedUserAccountName = accountName;
             this.nestedPassword = nestedPassword;
         }
 
         public UserBuilder(User user) {
-            this.nestedEmailAddress = user.emailAddress;
+            this.nestedUserAccountName = user.userAccountName;
             this.nestedPassword = user.password;
             this.nestedIpValue = user.ipValue;
             this.nestedPortValue = user.portValue;

@@ -7,12 +7,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.R;
@@ -35,6 +35,7 @@ public class LogInFragment extends Fragment {
     public static final String ip = "ipKey";
     public static final String port = "portKey";
     public static final String isAdmin = "isAdmin";
+    private static final String TAG = "plug_login_tag";
     private static SharedPreferences sharedpreferences;
 
     private Button loginButton;
@@ -65,7 +66,7 @@ public class LogInFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        attemptToLogin(fragmentView.findViewById(R.id.email_input), fragmentView.findViewById(R.id.password_input),
+                        attemptToLogin(fragmentView.findViewById(R.id.username_input), fragmentView.findViewById(R.id.password_input),
                                 fragmentView.findViewById(R.id.ip_address), fragmentView.findViewById(R.id.port_number));
                     }
                 }
@@ -73,10 +74,10 @@ public class LogInFragment extends Fragment {
         return fragmentView;
     }
 
-    private void attemptToLogin(View emailInput, View passwordInput, View ipInput, View portInput) {
-        if (emailInput instanceof EditText && passwordInput instanceof EditText &&
+    private void attemptToLogin(View userAccountNameInput, View passwordInput, View ipInput, View portInput) {
+        if (userAccountNameInput instanceof EditText && passwordInput instanceof EditText &&
                 ipInput instanceof EditText && portInput instanceof EditText) {
-            final String emailAddress = ((EditText) emailInput).getText().toString();
+            final String accountName = ((EditText) userAccountNameInput).getText().toString();
             final String passwordValue = ((EditText) passwordInput).getText().toString();
             final String ipValue = ((EditText) ipInput).getText().toString();
             final String portValue = ((EditText) portInput).getText().toString();
@@ -88,7 +89,7 @@ public class LogInFragment extends Fragment {
                 public void onResponse(User connectedUser) {
                     if (connectedUser != null) {
                         SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putString(login, connectedUser.getEmailAddress());
+                        editor.putString(login, connectedUser.getUserAccountName());
                         editor.putString(password, connectedUser.getPassword());
                         editor.putString(ip, connectedUser.getIpValue());
                         editor.putString(port, connectedUser.getPortValue());
@@ -104,10 +105,10 @@ public class LogInFragment extends Fragment {
 
                 @Override
                 public void onError(String errorMessage) {
-                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, errorMessage);
                 }
             });
-            checkUserTask.send(new User.UserBuilder(emailAddress, passwordValue).ipAddress(ipValue).portAddress(portValue).build());
+            checkUserTask.send(new User.UserBuilder(accountName, passwordValue).ipAddress(ipValue).portAddress(portValue).build());
         }
     }
 

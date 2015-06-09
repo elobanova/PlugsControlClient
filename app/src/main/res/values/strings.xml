@@ -7,7 +7,7 @@
     <string name="login_tab_label">Log In</string>
     <string name="signup_tab_label">Sign Up</string>
     <string name="login_button_label">Log In</string>
-    <string name="login_email_label">Email:</string>
+    <string name="login_username_label">User name:</string>
     <string name="login_password_label">Password:</string>
     <string name="full_name"><![CDATA[Name & Surname:]]></string>
     <string name="create_password">Create password:</string>
