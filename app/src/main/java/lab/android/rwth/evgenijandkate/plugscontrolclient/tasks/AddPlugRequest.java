@@ -1,5 +1,6 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
@@ -12,7 +13,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.SSLContextHelper;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.PlugTransferableData;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
@@ -25,6 +29,10 @@ public class AddPlugRequest {
     public static final String SWITCH_CODE_PROPERTY = "switch_code";
     public static final String STATE_PROPERTY = "state";
     private OnResponseListener onResponseListener;
+    private Context context;
+    public AddPlugRequest(Context context){
+        this.context=context;
+    }
 
     public void send(PlugTransferableData plugData) {
         new HttpAddPlugTask().execute(plugData);
@@ -38,7 +46,7 @@ public class AddPlugRequest {
 
         @Override
         protected Boolean doInBackground(PlugTransferableData... args) {
-            HttpURLConnection conn = null;
+            HttpsURLConnection conn = null;
             User connectedUser = LogInFragment.getConnectedUser();
             if (connectedUser == null) return false;
             try {
@@ -49,9 +57,11 @@ public class AddPlugRequest {
                 plugAsJson.put(SWITCH_CODE_PROPERTY, plugData.getSwitchCode());
                 plugAsJson.put(STATE_PROPERTY, plugData.getState().getName());
 
-                URL url = new URL("http://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs");
+                URL url = new URL("https://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs");
 
-                conn = (HttpURLConnection) url.openConnection();
+                conn = (HttpsURLConnection) url.openConnection();
+                conn.setSSLSocketFactory(SSLContextHelper.initSSLContext(context).getSocketFactory());
+                conn.setHostnameVerifier(SSLContextHelper.getHostnameVerifier());
                 conn.setRequestMethod("POST");
                 conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");

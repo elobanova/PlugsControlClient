@@ -88,7 +88,7 @@ public class AddPlugFragment extends Fragment {
                 }
                 PlugTransferableData plugTransferableData = new PlugTransferableData(plugName.getText().toString(),
                         switchCode.toString(), houseCode.toString(), StateEnum.valueOf(stateSpinner.getSelectedItem().toString()));
-                addPlugRequest = new AddPlugRequest();
+                addPlugRequest = new AddPlugRequest(getActivity());
                 addPlugRequest.setOnResponseListener(new OnResponseListener<Boolean>() {
                     @Override
                     public void onPreExecute() {

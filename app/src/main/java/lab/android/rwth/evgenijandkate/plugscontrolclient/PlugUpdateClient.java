@@ -3,17 +3,40 @@ package lab.android.rwth.evgenijandkate.plugscontrolclient;
 import android.app.Activity;
 import android.util.Log;
 
+import org.java_websocket.client.DefaultSSLWebSocketClientFactory;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_10;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+
+
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
 import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.SSLContextHelper;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.JSONPlugsParser;
@@ -61,12 +84,11 @@ public class PlugUpdateClient {
         URI uri;
         try {
 
-            uri = new URI("ws://"+connectedUser.getIpValue()+":"+(Integer.parseInt(connectedUser.getPortValue())+1));
+            uri = new URI("wss://" + connectedUser.getIpValue() + ":" + (Integer.parseInt(connectedUser.getPortValue()) + 1));
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;
         }
-
 
 
         //set Authorization header to authenticate the web socket handshake
@@ -127,7 +149,11 @@ public class PlugUpdateClient {
                 onPlugUpdateListener.onError(e.getMessage());
             }
         };
+
+
+        mWebSocketClient.setWebSocketFactory(new DefaultSSLWebSocketClientFactory(SSLContextHelper.initSSLContext(hostActivity)));
         mWebSocketClient.connect();
+
     }
 
     public void unsubscribe() {
@@ -137,4 +163,6 @@ public class PlugUpdateClient {
     public void setOnPlugUpdateListener(OnPlugUpdateListener onPlugUpdateListener) {
         this.onPlugUpdateListener = onPlugUpdateListener;
     }
+
+
 }

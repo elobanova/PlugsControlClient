@@ -25,6 +25,7 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.tasks.StateChangeReque
  */
 public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
     public PlugsListAdapter(Context context) {
+
         super(context);
     }
 
@@ -90,7 +91,7 @@ public class PlugsListAdapter extends AbstractListAdapter<IListItem> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 final StateEnum oldState = item.getState();
                 item.setState(isChecked ? StateEnum.ON : StateEnum.OFF);
-                StateChangeRequest stateChangeRequest = new StateChangeRequest(item);
+                StateChangeRequest stateChangeRequest = new StateChangeRequest(item,PlugsListAdapter.this.context );
                 stateChangeRequest.setOnResponseListener(new OnResponseListener<Boolean>() {
                     @Override
                     public void onPreExecute() {

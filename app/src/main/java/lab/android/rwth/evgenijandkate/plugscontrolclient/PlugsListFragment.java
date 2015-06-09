@@ -106,7 +106,7 @@ public class PlugsListFragment extends ListFragment {
         deletePlugsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DeletePlugRequest deletePlugRequest = new DeletePlugRequest(adapter.getItems());
+                DeletePlugRequest deletePlugRequest = new DeletePlugRequest(adapter.getItems(), getActivity());
                 deletePlugRequest.setOnResponseListener(new OnResponseListener<Boolean>() {
                     @Override
                     public void onPreExecute() {

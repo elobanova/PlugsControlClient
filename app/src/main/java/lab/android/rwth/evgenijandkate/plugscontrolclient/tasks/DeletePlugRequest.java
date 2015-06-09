@@ -1,5 +1,6 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.IOException;
@@ -9,7 +10,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.SSLContextHelper;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
@@ -19,8 +23,9 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 public class DeletePlugRequest {
     private OnResponseListener onResponseListener;
     private List<IListItem> itemsCheckedToBeDeleted;
-
-    public DeletePlugRequest(List<IListItem> items) {
+    private Context context;
+    public DeletePlugRequest(List<IListItem> items, Context context) {
+        this.context=context;
         this.itemsCheckedToBeDeleted = new ArrayList<>();
         for (IListItem listItem : items) {
             if (listItem.isChecked()) {
@@ -50,12 +55,14 @@ public class DeletePlugRequest {
         }
 
         private boolean connectToDeleteItem(int listItemId) {
-            HttpURLConnection conn = null;
+            HttpsURLConnection conn = null;
             User connectedUser = LogInFragment.getConnectedUser();
             if (connectedUser == null) return false;
             try {
-                URL url = new URL("http://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs/" + listItemId);
-                conn = (HttpURLConnection) url.openConnection();
+                URL url = new URL("https://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs/" + listItemId);
+                conn = (HttpsURLConnection) url.openConnection();
+                conn.setSSLSocketFactory(SSLContextHelper.initSSLContext(context).getSocketFactory());
+                conn.setHostnameVerifier(SSLContextHelper.getHostnameVerifier());
                 conn.setRequestMethod("DELETE");
                 conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
                 conn.setDoInput(true);

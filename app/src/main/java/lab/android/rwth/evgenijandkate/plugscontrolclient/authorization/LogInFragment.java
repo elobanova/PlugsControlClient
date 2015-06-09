@@ -63,7 +63,7 @@ public class LogInFragment extends Fragment {
             final String ipValue = ((EditText) ipInput).getText().toString();
             final String portValue = ((EditText) portInput).getText().toString();
 
-            CheckUserTask checkUserTask = new CheckUserTask();
+            CheckUserTask checkUserTask = new CheckUserTask(getActivity());
             checkUserTask.setOnResponseListener(new OnResponseListener<User>() {
                 @Override
                 public void onPreExecute() {

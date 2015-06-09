@@ -30,7 +30,7 @@ public class PlugsControlFragment extends Fragment {
     }
 
     private void loadData() {
-        getRequest = new PlugsListGetRequest();
+        getRequest = new PlugsListGetRequest(getActivity());
         getRequest.setOnResponseListener(new OnResponseListener<List<IListItem>>() {
 
             @Override

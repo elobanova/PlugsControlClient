@@ -1,5 +1,6 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
@@ -13,8 +14,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.SSLContextHelper;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.IListItem;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
 
@@ -23,6 +27,7 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
  */
 public class PlugsListGetRequest {
     private OnResponseListener onResponseListener;
+    private Context context;
 
     public void send() {
         new HttpGetPlugsTask().execute();
@@ -30,6 +35,10 @@ public class PlugsListGetRequest {
 
     public void setOnResponseListener(OnResponseListener onResponseListener) {
         this.onResponseListener = onResponseListener;
+    }
+
+    public PlugsListGetRequest(Context context){
+        this.context=context;
     }
 
     private class HttpGetPlugsTask extends AsyncTask<Void, Void, List<IListItem>> {
@@ -42,12 +51,14 @@ public class PlugsListGetRequest {
 
         @Override
         protected List<IListItem> doInBackground(Void... params) {
-            HttpURLConnection conn = null;
+            HttpsURLConnection conn = null;
             User connectedUser = LogInFragment.getConnectedUser();
             if (connectedUser == null) return null;
             try {
-                URL url = new URL("http://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs");
-                conn = (HttpURLConnection) url.openConnection();
+                URL url = new URL("https://" + connectedUser.getIpValue() + ":" + connectedUser.getPortValue() + "/api/plugs");
+                conn = (HttpsURLConnection) url.openConnection();
+                conn.setSSLSocketFactory(SSLContextHelper.initSSLContext(context).getSocketFactory());
+                conn.setHostnameVerifier(SSLContextHelper.getHostnameVerifier());
                 conn.setRequestMethod("GET");
                 conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(connectedUser.getEmailAddress(), connectedUser.getPassword()));
                 conn.setDoInput(true);

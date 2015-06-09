@@ -1,5 +1,8 @@
 package lab.android.rwth.evgenijandkate.plugscontrolclient.tasks;
 
+import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
@@ -13,8 +16,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import lab.android.rwth.evgenijandkate.plugscontrolclient.PlugsControlActivity;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.LogInFragment;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.SSLContextHelper;
+import lab.android.rwth.evgenijandkate.plugscontrolclient.authorization.SignInActivity;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.PlugTransferableData;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.StateEnum;
 import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
@@ -23,6 +30,10 @@ import lab.android.rwth.evgenijandkate.plugscontrolclient.model.User;
  * Created by ekaterina on 07.06.2015.
  */
 public class CheckUserTask {
+    private Context context;
+    public CheckUserTask(Context context){
+        this.context=context;
+    }
     private OnResponseListener onResponseListener;
 
     public void send(User user) {
@@ -38,10 +49,12 @@ public class CheckUserTask {
         @Override
         protected User doInBackground(User... args) {
             User loggingInUser = args[0];
-            HttpURLConnection conn = null;
+            HttpsURLConnection conn = null;
             try {
-                URL url = new URL("http://" + loggingInUser.getIpValue() + ":" + loggingInUser.getPortValue() + "/api/authenticate");
-                conn = (HttpURLConnection) url.openConnection();
+                URL url = new URL("https://" + loggingInUser.getIpValue() + ":" + loggingInUser.getPortValue() + "/api/authenticate");
+                conn = (HttpsURLConnection) url.openConnection();
+                conn.setSSLSocketFactory(SSLContextHelper.initSSLContext(context).getSocketFactory());
+                conn.setHostnameVerifier(SSLContextHelper.getHostnameVerifier());
                 conn.setRequestMethod("GET");
                 conn.addRequestProperty("Authorization", LogInFragment.getB64Auth(loggingInUser.getEmailAddress(), loggingInUser.getPassword()));
                 conn.setDoInput(true);
