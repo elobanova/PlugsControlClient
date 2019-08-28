@@ -1,6 +1,18 @@
-.gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
+
+# Intellij
+.idea/
+*.iml
+*.iws
+atlassin-ide-plugin.xml
+
+#Mac
 .DS_Store
-/build
+._.DS_Store
+
+#Gradle
+.gradle
+/build/
+
+#Avoid ignoring Gradle wrapper
+!gradle-wrapper.jar
